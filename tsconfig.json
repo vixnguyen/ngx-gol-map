@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-gol-map": [
+        "dist/ngx-gol-map"
+      ],
+      "ngx-gol-map/*": [
+        "dist/ngx-gol-map/*"
+      ]
+    }
   }
 }
