@@ -1,10 +1,12 @@
-import { Component, Input, OnInit, OnDestroy, AfterViewInit, ElementRef, OnChanges } from '@angular/core';
+import { Inject, Component, Input, OnInit, OnDestroy, AfterViewInit, ElementRef, OnChanges } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { defaults as defaultControls, FullScreen } from 'ol/control.js';
 import { transform } from 'ol/proj.js';
 import Map from 'ol/Map';
 import View from 'ol/View';
+import { NgxGolMapService } from './ngx-gol-map.service';
 
-declare let google;
+declare let Object;
 const DEFAULT_OPTIONS = {
    gmap: {
     disableDefaultUI: true,
@@ -13,7 +15,7 @@ const DEFAULT_OPTIONS = {
     disableDoubleClickZoom: true,
     scrollwheel: false,
     streetViewControl: false,
-    // center: new google.maps.LatLng(0, 0),
+    // center: new this._google.maps.LatLng(0, 0),
     zoom: 0
   },
   olmap: {
@@ -56,14 +58,17 @@ export class NgxGolMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
    * olmap: options for open layer
    */
   @Input() options: GolMap;
+  isInitializing: boolean;
   gmap: any;
   olmap: any;
-  private _options: any;
+  private _google: any;
+  private readonly _options: any;
 
   constructor(
-    private el: ElementRef
+    private el: ElementRef,
+    private loader: NgxGolMapService,
+    @Inject(DOCUMENT) private readonly document: any
   ) {
-    console.log('gol construtor');
     // init map options
     this._options = {
       gmap: {},
@@ -72,17 +77,17 @@ export class NgxGolMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   }
 
   ngOnInit() {
-    console.log('gol init');
+    this.loader.lazyLoadGmapApi().subscribe(_ => {
+      this._google = this.document.defaultView.google;
+      if (this.isInitializing) {
+        this._processMap();
+      }
+    });
     //
   }
 
   ngAfterViewInit() {
-    console.log('gol view init');
-    // if (this.options) {
-    //   this.setTargets();
-    //   this.setOptions();
-    //   this.render();
-    // }
+    this._processMap();
   }
 
   ngOnDestroy() {
@@ -90,12 +95,7 @@ export class NgxGolMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
   }
 
   ngOnChanges() {
-    console.log('gol view change');
-    // if (this.options && google) {
-    //   this.setTargets();
-    //   this.setOptions();
-    //   this.render();
-    // }
+    this._processMap();
   }
 
   /**
@@ -103,18 +103,18 @@ export class NgxGolMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
    */
   render() {
     // init gmap
-    this.gmap = new google.maps.Map(
-      this._options['gmap']['el'],
-      this._options['gmap']
+    this.gmap = new this._google.maps.Map(
+      this._options.gmap.el,
+      this._options.gmap
     );
     // init olmap
-    this.olmap = new Map(this._options['olmap']);
+    this.olmap = new Map(this._options.olmap);
     // get view
     const view = this.olmap.getView();
     // trigger to change gmap view after changing olmap view
     view.on('change:center', () => {
       const center = transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
-      this.gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
+      this.gmap.setCenter(new this._google.maps.LatLng(center[1], center[0]));
     });
     view.on('change:resolution', () => {
       this.gmap.setZoom(view.getZoom());
@@ -123,28 +123,29 @@ export class NgxGolMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     view.setZoom(this.options.zoom);
     view.setCenter(this.options.center);
     // olmap element remove itsefl
-    this.el.nativeElement.removeChild(this._options['olmap']['el']);
+    this.el.nativeElement.removeChild(this._options.olmap.el);
     // push olmap layers to gmap
-    this.gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(this._options['olmap']['el']);
+    this.gmap.controls[this._google.maps.ControlPosition.TOP_LEFT].push(this._options.olmap.el);
   }
 
   /**
    * set options for both google map and openlayer map
    */
   setOptions() {
-    ['gmap', 'olmap'].forEach((type: string) => {
+    const mapTypes: any = ['gmap', 'olmap'];
+    mapTypes.forEach((type: string) => {
       this._setOption(type);
     });
-    this._options['gmap']['center'] = new google.maps.LatLng(0, 0);
+    this._options.gmap.center = new this._google.maps.LatLng(0, 0);
   }
 
   /**
    * set targets as DOM elements
    */
   setTargets() {
-    this._options['gmap']['el'] = this.el.nativeElement.childNodes[0];
-    this._options['olmap']['el'] = this.el.nativeElement.childNodes[1];
-    this._options['olmap'].target = this.el.nativeElement.childNodes[1];
+    this._options.gmap.el = this.el.nativeElement.childNodes[0];
+    this._options.olmap.el = this.el.nativeElement.childNodes[1];
+    this._options.olmap.target = this.el.nativeElement.childNodes[1];
   }
 
   /**
@@ -152,7 +153,7 @@ export class NgxGolMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
    * @param mapTypeId is a string
    */
   setGmapType(mapTypeId: string) {
-    this.gmap.setMapTypeId(google.maps.MapTypeId[mapTypeId]);
+    this.gmap.setMapTypeId(this._google.maps.MapTypeId[mapTypeId]);
   }
 
   private _setOption(type: string) {
@@ -161,7 +162,20 @@ export class NgxGolMapComponent implements OnInit, AfterViewInit, OnDestroy, OnC
     }
     if (type === 'gmap' && this.options[type].mapTypeId) {
       // set google mapTypeId from input string
-      this._options[type].mapTypeId = google.maps.MapTypeId[this.options.gmap.mapTypeId];
+      this._options[type].mapTypeId = this._google.maps.MapTypeId[this.options.gmap.mapTypeId];
+    }
+  }
+
+  private _processMap() {
+    if (this.options && this._google) {
+      if (!this._options.gmap.target) {
+        this.setTargets();
+      }
+      this.setOptions();
+      this.render();
+      this.isInitializing = false;
+    } else {
+      this.isInitializing = true;
     }
   }
 
