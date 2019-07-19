@@ -1,19 +1,28 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { ReplaySubject, Observable, forkJoin } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface GolMapModuleConfig {
+  apiKey: string;
+}
+export const GOLMAP_MODULE_CONFIG = new InjectionToken<GolMapModuleConfig>('Gol map Configuration');
+
+@Injectable()
 export class NgxGolMapService {
 
   private loadedLibraries: { [url: string]: ReplaySubject<any> } = {};
+  private moduleConfig: GolMapModuleConfig;
 
-  constructor(@Inject(DOCUMENT) private readonly document: any) {}
+  constructor(
+    @Inject(GOLMAP_MODULE_CONFIG) private readonly config: GolMapModuleConfig,
+    @Inject(DOCUMENT) private readonly document: any
+  ) {
+    this.moduleConfig = config;
+  }
 
   lazyLoadGmapApi(): Observable<any> {
     return forkJoin([
-      this.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCB_qN4LZgcSQB9uIxpInydtRDEP1ihaWQ')
+      this.loadScript(`https://maps.googleapis.com/maps/api/js?key=${this.moduleConfig.apiKey}`)
     ]);
   }
 
