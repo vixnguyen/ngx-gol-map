@@ -5,3 +5,4 @@
 export * from './lib/ngx-gol-map.service';
 export * from './lib/ngx-gol-map.component';
 export * from './lib/ngx-gol-map.module';
+export * from './lib/ngx-gol-map.utils';

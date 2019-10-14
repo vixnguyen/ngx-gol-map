@@ -10,7 +10,9 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    NgxGolMapModule
+    NgxGolMapModule.forRoot({
+      apiKey: 'AIzaSyCB_qN4LZgcSQB9uIxpInydtRDEP1ihaWQ'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

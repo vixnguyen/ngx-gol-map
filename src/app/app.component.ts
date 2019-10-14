@@ -1,5 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-declare const google;
+// import { ol } from 'ngx-gol-map/ol';
+import { createVectorLayer } from 'ngx-gol-map';
+
+const MAPSERVER = `http://kt-mapserver.asiantech.vn/cgi-bin/mapserv/cgi-bin/mapserv`;
 @Component({
   selector: 'gol-map-root',
   templateUrl: './app.component.html',
@@ -7,11 +10,11 @@ declare const google;
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-  // @ViewChild('gmap', {static: true}) gmap;
+  @ViewChild('gmap', {static: true}) gmap;
   mapOptions: any = null;
 
   constructor() {
-    console.log('app construtor');
+    // console.log(createVectorLayer());
     //
   }
 
@@ -21,13 +24,16 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log('app view init', google);
+    console.log('app view init');
+    const coast = createVectorLayer({
+      url: `${MAPSERVER}?map=/map/simple.json.map&SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&outputformat=geojson&TYPENAME=coastl`
+    });
     this.mapOptions = {
       center: [15076237.774, 3970841.618],
       zoom: 12,
       olmap: {
         layers: [
-          // this.olLayer['ocean'],
+          coast
           // this.olLayer['coast']
         ]
       },
