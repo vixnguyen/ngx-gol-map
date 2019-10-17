@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     NgxGolMapModule.forRoot({
-      apiKey: 'AIzaSyCB_qN4LZgcSQB9uIxpInydtRDEP1ihaWQ'
+      apiKey: 'AIzaSyBInCkESWtilKBUkRve3TnXsE1cebJg8l4'
     })
   ],
   providers: [],

@@ -46,7 +46,7 @@ const ZOOM = 15;
     </div>
   `,
   styles: [
-    '.map { height: 100%; width: 100%; box-sizing: border-box }'
+    '.map { height: 100%; width: 100%; box-sizing: border-box } .map-wrapper { position: relative; width: 100%; height: 100vh; }'
   ]
 })
 export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
@@ -66,7 +66,6 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
   private _google: any;
   private _mapWrraper: any;
   private readonly _options: any;
-  isFirstChange: boolean;
 
   constructor(
     private el: ElementRef,
@@ -112,7 +111,6 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
    * renderring the map
    */
   render() {
-    this.isFirstChange = true;
     // init gmap
     this.gmap = new this._google.maps.Map(
       this._options.gmap.el,
@@ -123,9 +121,7 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
     // get view
     const view = this.olmap.getView();
     view.on('change:resolution', () => {
-      if (this.isFirstChange) {
-        this.gmap.setZoom(view.getZoom());
-      }
+      this.gmap.setZoom(view.getZoom());
     });
     view.on('change:center', () => {
       this.mappingMapsCenter(view);
@@ -136,10 +132,9 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
       if (zoomLevel % 1 !== 0) {
         zoomLevel = this._roundTo(zoomLevel, 0);
         view.setZoom(zoomLevel);
+        this.gmap.setZoom(zoomLevel);
       }
-      this.gmap.setZoom(zoomLevel);
       this.mappingMapsCenter(view);
-      this.isFirstChange = false;
     });
     if (this._options.olmap.el) {
       // olmap element remove itsefl
@@ -304,7 +299,7 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
       },
       olmap: {
         controls: defaultControls().extend({
-          zoom: false
+          zoom: true
         }),
         view: new View({
           center: [0, 0],

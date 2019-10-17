@@ -19,12 +19,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log('app init');
     //
   }
 
   ngAfterViewInit() {
-    console.log('app view init');
     const coast = createVectorLayer({
       url: `${MAPSERVER}?map=/map/simple.json.map&SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&outputformat=geojson&TYPENAME=coastl`
     });
@@ -34,11 +32,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       olmap: {
         layers: [
           coast
-          // this.olLayer['coast']
         ]
       },
       gmap: {
-        mapTypeId: 'SATELLITE'
+        // mapTypeId: 'SATELLITE'
       }
     };
   }
