@@ -20,4 +20,4 @@ Run `npm run build.package` to build the NgGolMap package with hot-reloading str
 
 ### Publishing
 
-After building your library with `ng build NgGolMap`, go to the dist folder `cd dist/ng-gol-map` and run `npm publish`.
+Run `npm run publish.package` to publish the NgGolMap package to npm.

@@ -1,9 +1,13 @@
 {
   "name": "ng-gol-map",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "peerDependencies": {
     "@angular/common": "^8.0.3",
     "@angular/core": "^8.0.3",
     "ol": "^5.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vixnguyen/ngx-gol-map.git"
   }
 }
