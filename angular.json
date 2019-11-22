@@ -120,33 +120,33 @@
         }
       }
     },
-    "NgxGolMap": {
+    "NgGolMap": {
       "projectType": "library",
-      "root": "projects/ngx-gol-map",
-      "sourceRoot": "projects/ngx-gol-map/src",
+      "root": "projects/ng-gol-map",
+      "sourceRoot": "projects/ng-gol-map/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/ngx-gol-map/tsconfig.lib.json",
-            "project": "projects/ngx-gol-map/ng-package.json"
+            "tsConfig": "projects/ng-gol-map/tsconfig.lib.json",
+            "project": "projects/ng-gol-map/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-gol-map/src/test.ts",
-            "tsConfig": "projects/ngx-gol-map/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-gol-map/karma.conf.js"
+            "main": "projects/ng-gol-map/src/test.ts",
+            "tsConfig": "projects/ng-gol-map/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-gol-map/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-gol-map/tsconfig.lib.json",
-              "projects/ngx-gol-map/tsconfig.spec.json"
+              "projects/ng-gol-map/tsconfig.lib.json",
+              "projects/ng-gol-map/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-// import { ol } from 'ngx-gol-map/ol';
-import { createVectorLayer } from 'ngx-gol-map';
+import { createVectorLayer } from 'ng-gol-map';
 
 const MAPSERVER = `http://localhost:8888/assets/map/vn-b.geojson`;
 @Component({

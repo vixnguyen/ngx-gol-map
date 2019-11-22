@@ -1,21 +1,21 @@
 import { NgModule, ModuleWithProviders, Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import { NgxGolMapComponent } from './ngx-gol-map.component';
-import { NgxGolMapService, GOLMAP_MODULE_CONFIG } from './ngx-gol-map.service';
+import { NgGolMapComponent } from './ng-gol-map.component';
+import { NgGolMapService, GOLMAP_MODULE_CONFIG } from './ng-gol-map.service';
 
 @NgModule({
   declarations: [
-    NgxGolMapComponent
+    NgGolMapComponent
   ],
   exports: [
-    NgxGolMapComponent
+    NgGolMapComponent
   ]
 })
-export class NgxGolMapModule {
+export class NgGolMapModule {
   static forRoot(config: any): ModuleWithProviders {
     return {
-      ngModule: NgxGolMapModule,
+      ngModule: NgGolMapModule,
       providers: [
-        NgxGolMapService,
+        NgGolMapService,
         {
           provide: GOLMAP_MODULE_CONFIG,
           useValue: config
@@ -26,7 +26,7 @@ export class NgxGolMapModule {
 
   static forChild() {
     return {
-      ngModule: NgxGolMapModule
+      ngModule: NgGolMapModule
     };
   }
 }

@@ -11,7 +11,7 @@ export const GOLMAP_MODULE_CONFIG = new InjectionToken<GolMapModuleConfig>('Gol 
 @Injectable({
   providedIn: 'root'
 })
-export class NgxGolMapService {
+export class NgGolMapService {
 
   private loadedLibraries: { [url: string]: ReplaySubject<any> } = {};
   private moduleConfig: GolMapModuleConfig;

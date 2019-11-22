@@ -5,7 +5,7 @@ import { defaults as defaultInteractions, DragPan } from 'ol/interaction.js';
 import { transform } from 'ol/proj.js';
 import Map from 'ol/Map';
 import View from 'ol/View';
-import { NgxGolMapService } from './ngx-gol-map.service';
+import { NgGolMapService } from './ng-gol-map.service';
 
 declare let Object;
 
@@ -37,7 +37,7 @@ const DEFAULT_COORDINATE = [0, 0];
 const ZOOM = 12;
 
 @Component({
-  selector: 'ngx-gol-map',
+  selector: 'ng-gol-map',
   template: `
     <div class="map-wrapper">
       <div data-ref="gmap" class="map"></div>
@@ -48,7 +48,7 @@ const ZOOM = 12;
     '.map { height: 100%; width: 100%; box-sizing: border-box } .map-wrapper { position: relative; width: 100%; height: 100vh; }'
   ]
 })
-export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
+export class NgGolMapComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    * OPTIONS:
@@ -68,7 +68,7 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private el: ElementRef,
-    private loader: NgxGolMapService,
+    private loader: NgGolMapService,
     @Inject(DOCUMENT) private readonly document: any
   ) {
     // init map options

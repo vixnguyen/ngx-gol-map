@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgxGolMapModule } from 'ngx-gol-map';
+import { NgGolMapModule } from 'ng-gol-map';
 
 import { AppComponent } from './app.component';
 
@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    NgxGolMapModule.forRoot({
+    NgGolMapModule.forRoot({
       apiKey: 'AIzaSyBInCkESWtilKBUkRve3TnXsE1cebJg8l4'
     })
   ],
