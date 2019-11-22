@@ -33,8 +33,8 @@ interface FsDocument extends HTMLDocument {
   onmozfullscreenchange: any;
 }
 
-const TOKYO_COORDINATE = [15434291.484408574, 4232592.711356004];
-const ZOOM = 15;
+const DEFAULT_COORDINATE = [0, 0];
+const ZOOM = 12;
 
 @Component({
   selector: 'ngx-gol-map',
@@ -42,7 +42,6 @@ const ZOOM = 15;
     <div class="map-wrapper">
       <div data-ref="gmap" class="map"></div>
       <div data-ref="olmap" class="map"></div>
-      <h6 class="map-copyright">&copy; Asia Air Survey</h6>
     </div>
   `,
   styles: [
@@ -129,8 +128,8 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
     // trigger to change gmap view after changing olmap view
     view.on('change', () => {
       let zoomLevel = view.getZoom();
-      if (zoomLevel % 1 !== 0) {
-        zoomLevel = this._roundTo(zoomLevel, 0);
+      if (zoomLevel % 0.25 !== 0) {
+        zoomLevel = this._roundTo(zoomLevel, 0.25);
         view.setZoom(zoomLevel);
         this.gmap.setZoom(zoomLevel);
       }
@@ -151,10 +150,11 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
       this.centeringToAddress();
     }
     view.setZoom(this.options.zoom || ZOOM);
-    view.setCenter(this.options.center || this.options.centerAlt || TOKYO_COORDINATE);
+    view.setCenter(this.options.center || this.options.centerAlt || DEFAULT_COORDINATE);
     this.onRendered.emit(true);
     // // Disabled use one finger touch to drag map in mobile
     this.olmap.on('click', event => {
+      console.log(event);
       let pointLayer: any;
       const featureAtPixel = this.olmap.forEachFeatureAtPixel(event.pixel, (ft: any, layer: any) => {
         pointLayer = layer;
@@ -216,6 +216,19 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
+   * Centering the map
+   * @param coordinate it's required
+   * @param isEPSG4236 default is false
+   * - if coordinate is EPSG:4326 it will be transformed to EPSG:3857 then centering the map
+   */
+  setMapCenter(coordinate: any, isEPSG4236: boolean = false) {
+    if (isEPSG4236) {
+      coordinate = this.transformEpsg(coordinate);
+    }
+    this.olmap.getView().setCenter(coordinate);
+  }
+
+  /**
    * get map center coordinate
    */
   getMapCenter() {
@@ -234,19 +247,6 @@ export class NgxGolMapComponent implements OnInit, OnDestroy, OnChanges {
    */
   getMapView() {
     return this.olmap.getView();
-  }
-
-  /**
-   * Centering the map
-   * @param coordinate it's required
-   * @param isEPSG4236 default is false
-   * - if coordinate is EPSG:4326 it will be transformed to EPSG:3857 then centering the map
-   */
-  setMapCenter(coordinate: any, isEPSG4236: boolean = false) {
-    if (isEPSG4236) {
-      coordinate = this.transformEpsg(coordinate);
-    }
-    this.olmap.getView().setCenter(coordinate);
   }
 
   private transformEpsg(coordinate: any, src: string = 'EPSG:4326', dest: string = 'EPSG:3857') {
