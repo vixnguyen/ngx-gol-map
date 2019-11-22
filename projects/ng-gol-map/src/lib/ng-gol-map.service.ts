@@ -5,6 +5,8 @@ import Geolocation from 'ol/Geolocation';
 declare const google;
 export interface GolMapModuleConfig {
   apiKey: string;
+  defaultZoom?: number;
+  defaultCenter?: [number, number];
 }
 export const GOLMAP_MODULE_CONFIG = new InjectionToken<GolMapModuleConfig>('Gol map Configuration');
 
@@ -22,7 +24,7 @@ export class NgGolMapService {
     @Inject(DOCUMENT) private readonly document: any
   ) {
     this.moduleConfig = config;
-    this.locationObserver$ = <Subject<any>>new Subject();
+    this.locationObserver$ = new Subject();
   }
 
   lazyLoadGmapApi(): Observable<any> {
@@ -31,7 +33,15 @@ export class NgGolMapService {
     ]);
   }
 
-  findMyLocation() {
+  getDefaultZoom() {
+    return this.moduleConfig.defaultZoom || 5;
+  }
+
+  getDefaultCenter() {
+    return this.moduleConfig.defaultCenter || [0, 0];
+  }
+
+  findCurrentLocation() {
     // Init geolocation
     const geolocation = new Geolocation({
       projection: 'EPSG:3857',
@@ -67,10 +77,10 @@ export class NgGolMapService {
     const geocoder = new google.maps.Geocoder();
     return new Observable((observer) => {
       geocoder.geocode({
-        'address': address
+        address
       }, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK) {
-          const coord = [results[0].geometry.location.lng(), results[0].geometry.location.lat()]
+          const coord = [results[0].geometry.location.lng(), results[0].geometry.location.lat()];
           observer.next(coord);
           observer.complete();
         } else {

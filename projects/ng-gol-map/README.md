@@ -40,3 +40,16 @@ Your template look like
 ```
 <ng-gol-map [options]="mapOptions"></ng-gol-map>
 ```
+
+## Built-in
+
+### GolMap (component)
+- setGmapType, setCenter, setZoom
+- getView, getCenter, getZoom
+- onRendered, onClick
+
+### Service
+- findCurrentLocation, getCoordByAddress, getDefaultZoom, getDefaultCnter
+
+### Utilities
+- createVectorLayer, createTileLayer, createRasterLayer

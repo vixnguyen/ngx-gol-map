@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       url: `${environment.mapDataUrl}/vn.geojson`
     });
     this.mapOptions = {
-      center: [12047561.375522647, 1813054.1072575005],
+      center: [12047561.375522647, 1813054.1072575005], // Location of Danang - Vietnam
       zoom: 5,
       olmap: {
         layers: [
@@ -32,5 +32,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         // mapTypeId: 'SATELLITE'
       }
     };
+  }
+
+  clickToMap(e: any) {
+    console.log(e);
   }
 }

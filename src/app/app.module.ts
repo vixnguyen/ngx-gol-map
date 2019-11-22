@@ -11,7 +11,9 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     NgGolMapModule.forRoot({
-      apiKey: 'AIzaSyBInCkESWtilKBUkRve3TnXsE1cebJg8l4'
+      apiKey: 'AIzaSyBInCkESWtilKBUkRve3TnXsE1cebJg8l4',
+      defaultZoom: 7,
+      defaultCenter: [11782284.054689, 2394570.086694302] // Location of Hanoi - Vietnam
     })
   ],
   providers: [],

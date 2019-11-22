@@ -33,9 +33,6 @@ interface FsDocument extends HTMLDocument {
   onmozfullscreenchange: any;
 }
 
-const DEFAULT_COORDINATE = [0, 0];
-const ZOOM = 12;
-
 @Component({
   selector: 'ng-gol-map',
   template: `
@@ -149,22 +146,17 @@ export class NgGolMapComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.options.center && !this.options.centerAlt && this.options.address) {
       this.centeringToAddress();
     }
-    view.setZoom(this.options.zoom || ZOOM);
-    view.setCenter(this.options.center || this.options.centerAlt || DEFAULT_COORDINATE);
+    view.setZoom(this.options.zoom || this.loader.getDefaultZoom());
+    view.setCenter(this.options.center || this.options.centerAlt || this.loader.getDefaultCenter());
     this.onRendered.emit(true);
     // // Disabled use one finger touch to drag map in mobile
     this.olmap.on('click', event => {
-      console.log(event);
-      let pointLayer: any;
-      const featureAtPixel = this.olmap.forEachFeatureAtPixel(event.pixel, (ft: any, layer: any) => {
-        pointLayer = layer;
-        return ft;
-      });
       const emitData = {
         event,
-        map: this.olmap,
-        layer: pointLayer,
-        featureAtPixel
+        coordinate: {
+          original: event.coordinate,
+          gmap: this.transformEpsg(event.coordinate, 'EPSG:3857', 'EPSG:4326')
+        }
       };
       this.onClick.emit(emitData);
     });
@@ -221,7 +213,7 @@ export class NgGolMapComponent implements OnInit, OnDestroy, OnChanges {
    * @param isEPSG4236 default is false
    * - if coordinate is EPSG:4326 it will be transformed to EPSG:3857 then centering the map
    */
-  setMapCenter(coordinate: any, isEPSG4236: boolean = false) {
+  setCenter(coordinate: any, isEPSG4236: boolean = false) {
     if (isEPSG4236) {
       coordinate = this.transformEpsg(coordinate);
     }
@@ -229,23 +221,31 @@ export class NgGolMapComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
+   * Zooming the map
+   * @param zoom it's required
+   */
+  setZoom(zoomLevel: number) {
+    this.olmap.getView().setZoom(zoomLevel);
+  }
+
+  /**
    * get map center coordinate
    */
-  getMapCenter() {
+  getCenter() {
     return this.olmap.getView().getCenter();
   }
 
   /**
    * get map's current zoom level
    */
-  getZoomLevel() {
+  getZoom() {
     return this.olmap.getView().getZoom();
   }
 
   /**
-   * get openlayer map view
+   * get map view, it's openlayer object
    */
-  getMapView() {
+  getView() {
     return this.olmap.getView();
   }
 
