@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 // import { ol } from 'ngx-gol-map/ol';
 import { createVectorLayer } from 'ngx-gol-map';
 
-const MAPSERVER = `http://kt-mapserver.asiantech.vn/cgi-bin/mapserv/cgi-bin/mapserv`;
+const MAPSERVER = `http://localhost:8888/assets/map/vn-b.geojson`;
 @Component({
   selector: 'gol-map-root',
   templateUrl: './app.component.html',
@@ -24,11 +24,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const coast = createVectorLayer({
-      url: `${MAPSERVER}?map=/map/simple.json.map&SERVICE=WFS&VERSION=1.1.0&REQUEST=GetFeature&outputformat=geojson&TYPENAME=coastl`
+      url: `${MAPSERVER}`
     });
     this.mapOptions = {
-      center: [15076237.774, 3970841.618],
-      zoom: 12,
+      center: [12047561.375522647, 1813054.1072575005],
+      zoom: 5,
       olmap: {
         layers: [
           coast
