@@ -35,6 +35,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   clickToMap(e: any) {
-    console.log(e);
+    // this event to catch-up click behavior on the map
   }
 }
