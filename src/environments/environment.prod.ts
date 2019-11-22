@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: false,
+  mapDataUrl: 'http://localhost:4200/assets/map',
+  apiKey: 'your Google Api Key'
 };

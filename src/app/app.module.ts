@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { NgGolMapModule } from 'ng-gol-map';
 
 import { AppComponent } from './app.component';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     NgGolMapModule.forRoot({
-      apiKey: 'AIzaSyBInCkESWtilKBUkRve3TnXsE1cebJg8l4',
+      apiKey: environment.apiKey,
       defaultZoom: 7,
       defaultCenter: [11782284.054689, 2394570.086694302] // Location of Hanoi - Vietnam
     })

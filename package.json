@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 8888",
+    "start": "ng serve --port 4200",
     "build": "ng build",
     "build.package": "ng build NgGolMap --watch",
     "publish.package": "ng build NgGolMap && cd dist/ng-gol-map && npm publish",

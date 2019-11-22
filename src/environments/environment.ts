@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  mapDataUrl: 'http://localhost:8888/assets/map'
+  mapDataUrl: 'http://localhost:4200/assets/map',
+  apiKey: 'Your Google API Key'
 };
 
 /*
