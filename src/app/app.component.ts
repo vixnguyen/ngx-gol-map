@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { createVectorLayer } from 'ng-gol-map';
-
-const MAPSERVER = `http://localhost:8888/assets/map/vi.geojson`;
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'gol-map-root',
@@ -10,28 +9,23 @@ const MAPSERVER = `http://localhost:8888/assets/map/vi.geojson`;
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('gmap', {static: true}) gmap;
+  @ViewChild('golmap', {static: true}) golmap;
   mapOptions: any = null;
 
-  constructor() {
-    // console.log(createVectorLayer());
-    //
-  }
+  constructor() {}
 
-  ngOnInit() {
-    //
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
-    const coast = createVectorLayer({
-      url: `${MAPSERVER}`
+    const vnBoundary = createVectorLayer({
+      url: `${environment.mapDataUrl}/vn.geojson`
     });
     this.mapOptions = {
       center: [12047561.375522647, 1813054.1072575005],
       zoom: 5,
       olmap: {
         layers: [
-          coast
+          vnBoundary
         ]
       },
       gmap: {

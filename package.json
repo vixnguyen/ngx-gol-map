@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve --port 8888",
     "build": "ng build",
+    "build.package": "ng build NgGolMap --watch",
+    "publish.package": "ng build NgGolMap && cd dist/ng-gol-map && npm publish",
     "lint": "ng lint"
   },
   "private": true,
